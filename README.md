@@ -1,5 +1,7 @@
 # VOLTA° — immersive WebGL studio site
 
+[![Live demo](https://img.shields.io/badge/live-demo-0E6B52)](https://suncal.github.io/volta/) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![Stars](https://img.shields.io/github/stars/suncal/volta?style=social)](https://github.com/suncal/volta/stargazers)
+
 A sample "scroll is the camera" site, in **two selectable monolith styles**:
 
 | Style | What scroll does | Best for |
@@ -157,3 +159,9 @@ cd ../everbuilt && ./sync_demo.sh
 
 That rsyncs this folder over and re-applies the badge patch automatically. Don't
 rsync by hand — you'll silently drop the badge.
+
+---
+
+**If this is useful to you, a ⭐ on the repo helps other people find it.** Issues and pull requests are welcome.
+
+Built by [Priyankar "Sunny" Chakraborty](https://github.com/suncal) · [everbuiltstudio.com](https://everbuiltstudio.com)
