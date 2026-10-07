@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>VOLTA — Immersive Digital Studio</title>
+<meta name="description" content="VOLTA is an immersive digital studio. We design and build websites that behave like software and feel like film.">
+<link rel="stylesheet" href="styles.css">
+<script>
+  /* Embed mode (?embed=1): stamped before first paint so the chrome never
+     flashes inside a preview frame. main.js reads the same flag and drives
+     the scroll itself, so the preview plays on its own. */
+  if (new URLSearchParams(location.search).get('embed') === '1') {
+    document.documentElement.dataset.embed = '1';
+  }
+</script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "./vendor/three.module.js",
+    "three/addons/": "./vendor/"
+  }
+}
+</script>
+</head>
+<body>
+
+<!-- ============ LOADER ============ -->
+<div class="loader" id="loader">
+  <div class="loader__inner">
+    <div class="loader__mark">VOLTA<span>&deg;</span></div>
+    <div class="loader__bar"><i id="loaderBar"></i></div>
+    <div class="loader__pct"><span id="loaderPct">0</span>&mdash;100</div>
+  </div>
+</div>
+
+<!-- ============ CURSOR ============ -->
+<div class="cursor" id="cursor"><span class="cursor__label" id="cursorLabel"></span></div>
+
+<!-- ============ WEBGL ============ -->
+<canvas id="gl"></canvas>
+<div class="scrim" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <a class="nav__mark" href="#top" data-cursor="home">VOLTA<span>&deg;</span></a>
+  <nav class="nav__links">
+    <a href="#work">Work</a>
+    <a href="#capability">Capability</a>
+    <a href="#process">Process</a>
+    <a href="#pricing">Pricing</a>
+  </nav>
+  <a class="nav__cta" href="#contact" data-cursor="let's talk">
+    <span>Start a project</span>
+    <i></i>
+  </a>
+</header>
+
+<div class="rail" aria-hidden="true"><i id="railFill"></i></div>
+
+<!-- ============ SCENE STYLE SWITCH ============ -->
+<div class="styleswitch" id="styleSwitch">
+  <span class="styleswitch__label">Monolith</span>
+  <button type="button" data-style="corridor" data-cursor="fly through">Corridor</button>
+  <button type="button" data-style="orbit" data-cursor="orbit">Orbit</button>
+  <button type="button" data-style="daylight" data-cursor="your sky">Daylight</button>
+</div>
+
+<!-- ============ SOLAR READOUT (daylight style only) ============ -->
+<div class="sky" id="skyPanel" hidden>
+  <div class="sky__head">
+    <span class="sky__dot" id="skyDot"></span>
+    <b id="skyTime">--:--</b>
+    <span id="skyPhase">&mdash;</span>
+  </div>
+  <label class="sky__scrub">
+    <span class="sr-only">Preview another time of day</span>
+    <input type="range" id="skyScrub" min="0" max="1439" step="5" value="720">
+  </label>
+  <div class="sky__foot">
+    <span id="skyWhere">&mdash;</span>
+    <button type="button" id="skyLive" data-cursor="now">Back to now</button>
+  </div>
+</div>
+
+<main id="top" class="stage">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="hero">
+    <div class="hero__eyebrow reveal" data-depth="0.55">
+      <i></i> Immersive digital studio &mdash; Atlanta / Worldwide
+    </div>
+
+    <h1 class="hero__title" data-depth="1.15">
+      <span class="line"><span class="w">Websites</span> <span class="w">that</span></span>
+      <span class="line"><span class="w it">feel</span> <span class="w">like</span> <span class="w">this.</span></span>
+    </h1>
+
+    <div class="hero__foot" data-depth="0.8">
+      <p class="reveal">We build sites for brands that refuse to look like a template.
+        Real-time 3D, cinematic motion, engineered to load in under two seconds.</p>
+      <div class="hero__scroll reveal">
+        <span>Scroll</span>
+        <i></i>
+      </div>
+    </div>
+
+    <div class="hero__stats" data-depth="0.62">
+      <div class="stat reveal"><b data-count="47">0</b><span>projects shipped</span></div>
+      <div class="stat reveal"><b data-count="12">0</b><span>design awards</span></div>
+      <div class="stat reveal"><b data-count="98">0</b><span>avg. Lighthouse</span></div>
+    </div>
+  </section>
+
+  <!-- ============ MARQUEE ============ -->
+  <div class="marquee" aria-hidden="true" data-depth="1.35">
+    <div class="marquee__track">
+      <span>WebGL</span><i>&mdash;</i><span>Brand Systems</span><i>&mdash;</i><span>Motion Design</span><i>&mdash;</i>
+      <span>Headless Commerce</span><i>&mdash;</i><span>Creative Direction</span><i>&mdash;</i>
+      <span>WebGL</span><i>&mdash;</i><span>Brand Systems</span><i>&mdash;</i><span>Motion Design</span><i>&mdash;</i>
+      <span>Headless Commerce</span><i>&mdash;</i><span>Creative Direction</span><i>&mdash;</i>
+    </div>
+  </div>
+
+  <!-- ============ MANIFESTO ============ -->
+  <section class="manifesto" id="capability">
+    <p class="manifesto__text" data-depth="1.1">
+      <span class="mw">Most</span> <span class="mw">agencies</span> <span class="mw">ship</span> <span class="mw">a</span>
+      <span class="mw">page.</span> <span class="mw dim">We</span> <span class="mw dim">ship</span>
+      <span class="mw dim">an</span> <span class="mw dim">atmosphere</span> <span class="mw dim">&mdash;</span>
+      <span class="mw">real&#8209;time</span> <span class="mw">3D,</span> <span class="mw">frame&#8209;perfect</span>
+      <span class="mw">motion,</span> <span class="mw">and</span> <span class="mw">copy</span> <span class="mw">that</span>
+      <span class="mw">closes.</span>
+    </p>
+
+    <div class="caps">
+      <article class="cap reveal" data-depth="0.75">
+        <h3><em>01</em> Real-time 3D</h3>
+        <p>WebGL scenes locked to scroll. Product configurators, spatial storytelling, shader work &mdash; running at 60fps on a four-year-old phone.</p>
+      </article>
+      <article class="cap reveal" data-depth="0.75">
+        <h3><em>02</em> Motion &amp; art direction</h3>
+        <p>Every transition storyboarded. Type that arrives with intent, imagery that breathes, a cursor that responds to the page.</p>
+      </article>
+      <article class="cap reveal" data-depth="0.75">
+        <h3><em>03</em> Engineering</h3>
+        <p>Static-first builds on the edge. Sub-two-second loads, 95+ Lighthouse, accessible to WCAG AA. Beautiful is not an excuse for slow.</p>
+      </article>
+      <article class="cap reveal" data-depth="0.75">
+        <h3><em>04</em> Conversion</h3>
+        <p>Immersion is the hook; the funnel is the point. Booking flows, checkout, CRM wiring and analytics that prove the spend.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ WORK ============ -->
+  <section class="work" id="work">
+    <div class="sec-head" data-depth="1.05">
+      <span class="sec-head__num">Selected work</span>
+      <h2 class="reveal">Recent<br><em>builds</em></h2>
+    </div>
+
+    <div class="work__list">
+      <article class="proj reveal" data-depth="0.8" data-cursor="view" style="--a:#e8dcc8;--b:#8a6a3f">
+        <div class="proj__media"><canvas class="proj__canvas" data-seed="1"></canvas><span class="proj__year">2026</span></div>
+        <div class="proj__meta">
+          <h3>Aurelia Atelier</h3>
+          <p>Luxury jewellery house. A configurator that renders every stone in real time, wired to headless Shopify.</p>
+          <ul><li>WebGL</li><li>Commerce</li><li>Brand</li></ul>
+        </div>
+      </article>
+
+      <article class="proj reveal" data-depth="0.8" data-cursor="view" style="--a:#bcd8ff;--b:#2a4a86">
+        <div class="proj__media"><canvas class="proj__canvas" data-seed="2"></canvas><span class="proj__year">2026</span></div>
+        <div class="proj__meta">
+          <h3>Northwind Capital</h3>
+          <p>Private fund. Data made cinematic &mdash; scroll-driven performance charts that stay legible in a boardroom.</p>
+          <ul><li>Data viz</li><li>Motion</li><li>Web app</li></ul>
+        </div>
+      </article>
+
+      <article class="proj reveal" data-depth="0.8" data-cursor="view" style="--a:#ffd0c0;--b:#8d3320">
+        <div class="proj__media"><canvas class="proj__canvas" data-seed="3"></canvas><span class="proj__year">2025</span></div>
+        <div class="proj__meta">
+          <h3>Kilnhouse</h3>
+          <p>Chef-led restaurant group. Reservations, private-dining enquiries and a menu that changes daily without a developer.</p>
+          <ul><li>CMS</li><li>Booking</li><li>Art direction</li></ul>
+        </div>
+      </article>
+
+      <article class="proj reveal" data-depth="0.8" data-cursor="view" style="--a:#d6ffe8;--b:#1e6b4d">
+        <div class="proj__media"><canvas class="proj__canvas" data-seed="4"></canvas><span class="proj__year">2025</span></div>
+        <div class="proj__meta">
+          <h3>Meridian Health</h3>
+          <p>Nine clinics, one system. Location pages that rank, an intake flow that halved no-shows.</p>
+          <ul><li>SEO</li><li>Multi-site</li><li>Integrations</li></ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ PROCESS ============ -->
+  <section class="process" id="process">
+    <div class="sec-head" data-depth="1.05">
+      <span class="sec-head__num">How it runs</span>
+      <h2 class="reveal">Four weeks,<br><em>start to live</em></h2>
+    </div>
+
+    <ol class="steps">
+      <li class="step reveal" data-depth="0.7"><em>W1</em><h3>Direction</h3><p>Positioning workshop, competitive teardown, and two art directions rendered as real screens &mdash; not mood boards.</p></li>
+      <li class="step reveal" data-depth="0.7"><em>W2</em><h3>Design</h3><p>Full page system in Figma, motion prototypes for every key transition, copy written alongside the layout.</p></li>
+      <li class="step reveal" data-depth="0.7"><em>W3</em><h3>Build</h3><p>Production build in a staging environment you can open any time. Daily commits, weekly walkthrough call.</p></li>
+      <li class="step reveal" data-depth="0.7"><em>W4</em><h3>Launch</h3><p>Performance pass, accessibility audit, analytics, DNS cutover with zero downtime. Then 30 days of support included.</p></li>
+    </ol>
+  </section>
+
+  <!-- ============ PRICING ============ -->
+  <section class="pricing" id="pricing">
+    <div class="sec-head" data-depth="1.05">
+      <span class="sec-head__num">Engagements</span>
+      <h2 class="reveal">Pick a<br><em>lane</em></h2>
+    </div>
+
+    <div class="tiers">
+      <article class="tier reveal" data-depth="0.75">
+        <header><h3>Signature</h3><b>$7,500</b><span>4&ndash;5 weeks</span></header>
+        <ul>
+          <li>Up to 6 designed pages</li>
+          <li>Custom motion system</li>
+          <li>CMS so you can edit everything</li>
+          <li>Forms, CRM &amp; analytics wired</li>
+          <li>Launch + 30 days support</li>
+        </ul>
+        <a class="tier__cta" href="#contact" data-cursor="enquire">Enquire</a>
+      </article>
+
+      <article class="tier tier--hero reveal" data-depth="0.75">
+        <span class="tier__flag">Most requested</span>
+        <header><h3>Immersive</h3><b>$18,000</b><span>7&ndash;9 weeks</span></header>
+        <ul>
+          <li>Everything in Signature</li>
+          <li>Bespoke WebGL / 3D scene</li>
+          <li>Full brand &amp; art direction</li>
+          <li>Copywriting for every page</li>
+          <li>Awards submission package</li>
+          <li>90 days support</li>
+        </ul>
+        <a class="tier__cta" href="#contact" data-cursor="enquire">Enquire</a>
+      </article>
+
+      <article class="tier reveal" data-depth="0.75">
+        <header><h3>Partner</h3><b>$4,000<i>/mo</i></b><span>rolling</span></header>
+        <ul>
+          <li>Continuous design &amp; build</li>
+          <li>New campaigns and landers</li>
+          <li>Performance &amp; SEO retainer</li>
+          <li>Priority turnaround</li>
+          <li>Cancel with 30 days notice</li>
+        </ul>
+        <a class="tier__cta" href="#contact" data-cursor="enquire">Enquire</a>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="contact" id="contact">
+    <p class="contact__eyebrow reveal" data-depth="0.6">Currently taking on two projects for Q4</p>
+    <h2 class="contact__title" data-depth="1.2">
+      <span class="line"><span class="w">Let&rsquo;s</span> <span class="w">build</span></span>
+      <span class="line"><span class="w it">something</span> <span class="w">rare.</span></span>
+    </h2>
+    <a class="contact__mail" href="mailto:hello@volta.studio" data-cursor="write">hello@volta.studio</a>
+
+    <form class="form" id="form" novalidate data-depth="0.7">
+      <div class="field"><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" required></div>
+      <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
+      <div class="field field--full"><label for="f-brief">What are you building?</label><textarea id="f-brief" name="brief" rows="3" required></textarea></div>
+      <button class="form__submit" type="submit" data-cursor="send"><span>Send brief</span><i></i></button>
+      <p class="form__note" id="formNote" role="status"></p>
+    </form>
+  </section>
+
+  <footer class="foot">
+    <div class="foot__mark" data-depth="1.3">VOLTA<span>&deg;</span></div>
+    <div class="foot__cols">
+      <div><span>Studio</span><a href="#work">Work</a><a href="#process">Process</a><a href="#pricing">Pricing</a></div>
+      <div><span>Social</span><a href="#" data-cursor="follow">Instagram</a><a href="#" data-cursor="follow">Dribbble</a><a href="#" data-cursor="follow">LinkedIn</a></div>
+      <div><span>Contact</span><a href="mailto:hello@volta.studio">hello@volta.studio</a><a href="tel:+14045550119">+1 404 555 0119</a></div>
+    </div>
+    <div class="foot__base"><span>&copy; 2026 VOLTA Studio</span><span id="clock">&mdash;</span></div>
+  </footer>
+
+</main>
+
+<script type="module" src="main.js"></script>
+</body>
+</html>
